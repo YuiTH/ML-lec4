@@ -46,7 +46,8 @@ def act(z):
 def dact(z):
     return dsigmoid(z)
 
-
+def logistic_reg_predict(w,x,b):
+    return sigmoid(x@w+b)
 
 def bi_log_reg(x, y, epochs, lr):
     x = preprocess(x)   # preprocess
