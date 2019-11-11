@@ -44,8 +44,8 @@ def bi_perceptron(x, y, epochs, lr):
     w = np.random.standard_normal([x_dim, y_dim])  # (2,1) mean=0, stdev=1
     b = np.ones(y_dim)  # (1)
     
-    w_list.append(w)
-    b_list.append(b)
+    w_list.append(w.copy())
+    b_list.append(b.copy())
     z_total = x.dot(w) + b
     loss, acc = compute_loss(z_total, y)
     print("before training, loss = %f, acc = %f" % (loss, acc))
@@ -68,8 +68,8 @@ def bi_perceptron(x, y, epochs, lr):
             b -= lr * db            # (1)
             
         # loss of the epoch
-        w_list.append(w)
-        b_list.append(b)
+        w_list.append(w.copy())
+        b_list.append(b.copy())
         z_total = x_shuffle.dot(w) + b
         loss, acc = compute_loss(z_total, y_shuffle)
         if loss < loss_best_val:
@@ -114,8 +114,8 @@ def test():
     w = np.random.standard_normal([x_dim, y_dim])  # (2,1) mean=0, stdev=1
     b = np.ones(y_dim)  # (1)
     
-    w_list.append(w)
-    b_list.append(b)
+    w_list.append(w.copy())
+    b_list.append(b.copy())
     
     
     z_total = x.dot(w) + b
@@ -144,8 +144,8 @@ def test():
             b -= lr * db            # (1)
             
         # loss of the epoch
-        w_list.append(w)
-        b_list.append(b)
+        w_list.append(w.copy())
+        b_list.append(b.copy())
         z_total = x_shuffle.dot(w) + b
         loss, acc = compute_loss(z_total, y_shuffle)
         if loss < loss_best_val:

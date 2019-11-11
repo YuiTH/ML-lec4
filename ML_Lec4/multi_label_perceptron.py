@@ -51,8 +51,8 @@ def mul_perceptron(x, y, epochs, lr):
     w = np.random.standard_normal([x_dim, y_dim])  # (2,3) mean=0, stdev=1
     b = np.ones(y_dim)  # init b
     
-    w_list.append(w)
-    b_list.append(b)
+    w_list.append(w.copy())
+    b_list.append(b.copy())
     
     
     z_total = x.dot(w) + b
@@ -89,8 +89,8 @@ def mul_perceptron(x, y, epochs, lr):
             else:  # predict right
                 pass
         # loss of the epoch
-        w_list.append(w)
-        b_list.append(b)
+        w_list.append(w.copy())
+        b_list.append(b.copy())
         predict_total = x_shuffle.dot(w) + b
         loss, acc = compute_loss(predict_total, y_shuffle)
         if loss < loss_best_val:
@@ -136,8 +136,8 @@ def test():
     w = np.random.standard_normal([x_dim, y_dim])  # (2,3) mean=0, stdev=1
     b = np.ones(y_dim)  # init b
     
-    w_list.append(w)
-    b_list.append(b)
+    w_list.append(w.copy())
+    b_list.append(b.copy())
     
     
     z_total = x.dot(w) + b
@@ -175,8 +175,8 @@ def test():
             else:  # predict right
                 pass
         # loss of the epoch
-        w_list.append(w)
-        b_list.append(b)
+        w_list.append(w.copy())
+        b_list.append(b.copy())
         predict_total = x_shuffle.dot(w) + b
         loss, acc = compute_loss(predict_total, y_shuffle)
         if loss < loss_best_val:
