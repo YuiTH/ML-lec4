@@ -22,22 +22,26 @@ from preprocess import preprocess
 # plt.scatter(x2[:,0], x2[:,1], c='red')
 
 
-def plot_step(total_acc, total_loss, x, y, num_class, w_list, b_list):
+def plot_step(total_acc, total_loss, x, y, num_class, w_list, b_list,pred_fun):
     if len(w_list) == 0:
         return
-    plt.figure(1)
+    # plt.figure(1)
     plt.ion()
     plt.cla()
     plt.subplot(221)
-    plt.scatter(range(0, len(total_acc), 10),
-                total_acc[::10], color='blue')  # acc plot
+    plt.title('Acc')
+    plt.scatter(range(0, len(total_acc), 5),
+                total_acc[::5], s=9,color='blue')  # acc plot
     plt.plot(range(len(total_acc)), total_acc, color='blue')
     plt.subplot(222)
-    plt.scatter(range(0, len(total_loss), 10),
-                total_loss[::10], color='red')  # loss plot
+    plt.title('Loss')
+
+    plt.scatter(range(0, len(total_loss), 5),
+                total_loss[::5], s=9,color='red')  # loss plot
     plt.plot(range(len(total_loss)), total_loss, color='red')
     plt.subplot(223)
-    plot_decision_boundary(logistic_reg_predict, x, w_list[-1], b_list[-1], y)
+    # plot_decision_boundary(logistic_reg_predict, x, w_list[-1], b_list[-1], y)
+    plot_decision_boundary(pred_fun, x, w_list[-1], b_list[-1], y)
 
     # plt.plot([3,4],[4,5])
 
@@ -51,22 +55,24 @@ def plot_step(total_acc, total_loss, x, y, num_class, w_list, b_list):
     plt.show()
 
 
-def plot_steps(total_acc, total_loss, x, y, num_class, w_list, b_list):
+def plot_steps(total_acc, total_loss, x, y, num_class, w_list, b_list,pred_fun):
     x = preprocess(x)
+    if pred_fun == "per":
+        f = predict_multi_perception
+    elif pred_fun == "logi":
+        f = logistic_reg_predict
 
     for i in range(len(total_acc)):
         plot_step(total_acc[:i],
         total_loss[:i],
         x, y, num_class,
-        w_list[:i], b_list[:i])
+        w_list[:i], b_list[:i],f)
     plt.ioff()
     plt.show()
 
 
 
-# 咱们先顶一个一个函数来画决策边界
 def plot_decision_boundary(pred_func, X, w, b, y):
-    # 设定最大最小值，附加一点点边缘填充
     x_min, x_max = X[:, 0].min() - .5, X[:, 0].max() + .5
     y_min, y_max = X[:, 1].min() - .5, X[:, 1].max() + .5
     h = 0.01
@@ -74,12 +80,19 @@ def plot_decision_boundary(pred_func, X, w, b, y):
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
                          np.arange(y_min, y_max, h))
 
-    # 用预测函数预测一下
     Z = pred_func(w, np.c_[xx.ravel(), yy.ravel()], b)
     Z = Z.reshape(xx.shape)
-    print(Z)
+    # print(Z)
 
 
-    # 然后画出图
     plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
-    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
+    plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral,s=5)
+
+
+def predict_multi_perception(w, x, b):  # (N, 3)
+    z = x@w+b
+    pred_index = z.argmax(axis=1)
+
+    if z.shape[1] == 3:
+        return pred_index
+    return z > 0

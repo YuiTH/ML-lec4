@@ -105,7 +105,7 @@ def step():
 
 def plot_step():
 
-    plt.figure(1)
+    # plt.figure(1)
     plt.ion()
     plt.cla()
     plt.subplot(221)
@@ -133,7 +133,7 @@ for epoch in range(epochs):
     plot_step()
     total_loss.append(loss)
     total_acc.append(acc)
-    plt.figure(2)
+    # plt.figure(2)
     if (epoch+1) % 10 == 0:
         print("epoch %d, loss = %f, acc = %f" % (epoch+1, loss, acc))
 
